@@ -1,18 +1,24 @@
 // $Id$
 
-The restricted_text module provides an input filter allowing authors
-to restrict some parts of their text to users with certain roles.
+The Restricted Text module allows users to restrict access to
+parts of a node body, based on various restrictions. This is
+implemented as an input filter, so it will only work where
+other input filters work.
 
-Users can insert [restrict:roles=<comma-separated roles>] and [/restrict]
-tags into their text, and anything in-between these will only be visible
-to users who are a member of a role in the comma-separated list.  Don't
-separate with ', ' (ie, a comma and a space), this version isn't robust
-enough to handle that.
+Please note that using this filter prevents the filter mechanism
+from caching text for that format. If you wish to use this filter
+on a site with a heavy load, I suggest creating a separate input
+format with this filter so that you can only use it where it is
+needed.
 
-As a short-cut for the most common case, [restrict] is equivalent
-to [restrict:roles=authenticated user].
+The filter allows users to surround blocks of text with [restrict] and
+[/restrict], which will only allow authenticated users to see the enclosed
+text. Alternately, the author can use [restrict:roles=(comma-separated list of roles)]
+to restrict to other roles. Examples:
+    [restrict:roles=Editors]
+    [restrict:roles=Site 1,Site 2]
+    [restrict:roles=Programming Group,QA Department]
 
-This module was developed for the MGH Biostatistics Center.
-Please send any questions / comments / suggestions to
-    remorse@partners.org
-or use the projects interface at Drupal.org.
+Other modules can provide alternate restriction schemes using Drupal's
+hook mechanism. For more information on this, see the implementation
+of hook_restricted_text_access() in the module.
