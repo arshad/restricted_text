@@ -1,0 +1,9 @@
+; $Id$
+
+name = Restricted Text
+description = "Input filter; allows text to be hidden based on users role."
+dependencies[] = filter
+package = "Input filters"
+
+core = 6.x
+php = 5.2
