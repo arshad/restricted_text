@@ -1,4 +1,3 @@
-// $Id$
 
 The Restricted Text module allows users to restrict access to
 parts of a node body, based on various restrictions. This is

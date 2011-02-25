@@ -1,4 +1,3 @@
-// $Id$
 
 2006 September 25:
     initial commit
