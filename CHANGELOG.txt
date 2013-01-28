@@ -1,8 +1,11 @@
 
 2006 September 25:
-    initial commit
+  initial commit
 
 2008 Dec 08:
-    moved development back into HEAD
-    updated to allow plug-in modules
-    is now Drupal-6 ready (actually, it probably was earlier)
+  moved development back into HEAD
+  updated to allow plug-in modules
+  is now Drupal-6 ready (actually, it probably was earlier)
+
+2013 Jan 28
+  port to drupal 7

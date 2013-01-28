@@ -1,5 +1,5 @@
 <?php
-
+//$Id$
 
 /**
  * @file
@@ -7,77 +7,39 @@
  * be hidden based on the users roles, or other criteria established
  * by modules
  */
- 
+
+
 /**
- * Implementation of hook_filter_tips().
+ * Implementation of hook_filter_info()
  */
-function restricted_text_filter_tips($delta, $format, $long = false) {
+function restricted_text_filter_info() {
+  $filters['filter_restricted_text'] = array(
+    'title' => t('Restricted Text'),
+    'description' =>  t('Restrict text from users by wrapping in [restrict] and [/restrict] tags.'),
+    'process callback' => '_restricted_text_filter_process',
+    'tips callback' => '_restricted_text_filter_tips',
+    'cache' => FALSE
+  );
+  
+  return $filters;
+}
+
+/**
+ * Callback functions for tips
+ */
+function _restricted_text_filter_tips($delta, $format, $long = FALSE) {
   if ($long) {
-    return "Restrict text from users by wrapping in [restrict] and [/restrict] tags. This will only allow authenticated users to see the text inside. If you wish to restrict by specific roles, you may user [restrict:roles=(some comma separated list of roles)]. Some modules may allow other restriction possibilities.";
+    return t("Restrict text from users by wrapping in [restrict] and [/restrict] tags. This will only allow authenticated users to see the text inside. If you wish to restrict by specific roles, you may user [restrict:roles=(some comma separated list of roles)]. Some modules may allow other restriction possibilities.");
   }
   else {
-    return "Restrict text from users by wrapping in [restrict] and [/restrict] tags.";
+    return ("Restrict text from users by wrapping in [restrict] and [/restrict] tags.");
   }
 }
 
 /**
- * Implementation of hook_filter().
+ * Process callback for hook_filter_info()
  */
-function restricted_text_filter($op, $delta = 0, $format = -1, $text = '') {
-  switch ($op) {
-    case 'list':
-      return array(
-        0 => t('Restricted Text filter'),
-      );
-      break;
-    
-    case 'description':
-      return t('Hides text based on user roles');
-      break;
-    
-    case 'settings':
-      // This filter has no user settings
-      break;
-    
-    case 'no cache':
-      // This filter is not suggested for heavy use sites,
-      // because the module does not allow caching of text.
-      // If text was cached, it could not be properly displayed
-      // to different users.
-      return TRUE;
-      break;
-    
-    case 'prepare':
-      // We do all of our work during the 'prepare' stage. This keeps
-      // other filters from trying to do things that will not be displayed.
-      // I suggest putting this filter first in the list of evaluated filters
-      // for a given input format.
-      return restricted_text_prepare($text);
-      break;
-    
-    case 'process':
-      return $text;
-      break;
-    
-    default:
-      return $text;
-      break;
-  }
-}
-
-/**
- * A small layer of encapsulation around the actual work of the module.
- *
- * This function could be replaced by an inline call to preg_replace_callback()
- * in the switch statement above. Previous versions of the module did exactly that.
- * However, the current implementation does not allow nested restrictions. I may
- * want to change this in the future. If I do so, it will be cleaner to have this
- * encapsulation function, as I will only need to modify it, and the changes
- * will be better localized.
- */
-function restricted_text_prepare($text) {
-  // This lovely piece of regular expression finds all of the [restrict][/restrict]
-  // blocks and passes them to the callback.
+function _restricted_text_filter_process($text, $filter) {
   $text = preg_replace_callback('/\[restrict(?::(\w+)=([^\]]+))?\](.+?)\[\/restrict\]/sm', "_restricted_text_replace_callback", $text);
   return $text;
 }
