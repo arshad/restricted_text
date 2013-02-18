@@ -1,6 +1,4 @@
 <?php
-//$Id$
-
 /**
  * @file
  * restricted_text is an input filter that lets text in a node
